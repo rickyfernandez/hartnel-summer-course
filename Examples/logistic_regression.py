@@ -54,7 +54,7 @@ y_b = -(theta.x[0]+theta.x[1]*x_b)/theta.x[2]
 
 # find accuracy of logistic regression
 p = sigmoid(np.dot(X, theta.x)) >= 0.5
-print "\naccuracy of logistic regression: %.2f%%" % (np.sum(p == y)/float(m))
+print "\naccuracy of logistic regression: %.1f%%" % (np.sum(p == y)/float(m)*100.)
 
 plt.plot(x[i,0], x[i,1], 'oy')
 plt.plot(x[j,0], x[j,1], 'or')
