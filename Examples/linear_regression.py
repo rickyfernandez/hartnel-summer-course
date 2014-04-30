@@ -3,20 +3,15 @@ import matplotlib.pyplot as plt
 
 def cost_function(X, y, theta):
 
-    # number of training examples
     m = y.shape[0]
-
     error = np.dot(X, theta) - y
 
     J = 0.5*np.dot(error, error)/m
-
     return J
 
 def gradient_descent(X, y, theta, alpha, num_iterations):
 
-    # number of training examples
     m = y.shape[0]
-    
     X_T = X.T
 
     for i in xrange(num_iterations):
@@ -34,7 +29,6 @@ theta = np.zeros(2)   # initial theta
 # find theta that minimizes the cost function
 X = np.array([np.ones(x.size), x]).T
 gradient_descent(X, y, theta, alpha, 1500)
-
 
 plt.plot(x, y, 'or')
 plt.plot(x, 2.*x + 1, 'b')
