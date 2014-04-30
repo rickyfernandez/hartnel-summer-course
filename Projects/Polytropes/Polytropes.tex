@@ -1,0 +1,363 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{listings}             % Include the listings-package
+\usepackage{color}
+\usepackage{xcolor}
+%\usepackage[scaled]{beramono}
+\usepackage{tgheros}
+%\uspackage{mathtools}
+
+
+\usepackage{caption}
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\definecolor{light-gray}{gray}{0.9}
+
+\lstdefinestyle{FormattedNumber}{%
+    literate={0}{{\textcolor{purple}{0}}}{1}%
+             {1}{{\textcolor{purple}{1}}}{1}%
+             {2}{{\textcolor{purple}{2}}}{1}%
+             {3}{{\textcolor{purple}{3}}}{1}%
+             {4}{{\textcolor{purple}{4}}}{1}%
+             {5}{{\textcolor{purple}{5}}}{1}%
+             {6}{{\textcolor{purple}{6}}}{1}%
+             {7}{{\textcolor{purple}{7}}}{1}%
+             {8}{{\textcolor{purple}{8}}}{1}%
+             {9}{{\textcolor{purple}{9}}}{1}%
+             {.0}{{\textcolor{purple}{.0}}}{2}% Following is to ensure that only periods
+             {.1}{{\textcolor{purple}{.1}}}{2}% followed by a digit are changed.
+             {.2}{{\textcolor{purple}{.2}}}{2}%
+             {.3}{{\textcolor{purple}{.3}}}{2}%
+             {.4}{{\textcolor{purple}{.4}}}{2}%
+             {.5}{{\textcolor{purple}{.5}}}{2}%
+             {.6}{{\textcolor{purple}{.6}}}{2}%
+             {.7}{{\textcolor{purple}{.7}}}{2}%
+             {.8}{{\textcolor{purple}{.8}}}{2}%
+             {.9}{{\textcolor{purple}{.9}}}{2}%
+     % ,
+   %basicstyle=\ttfamily,%  Optional to use this
+}
+
+
+
+\lstset{    % Set your language (you can change the language for each code-block optionally)
+    language=Python,
+    basicstyle=\linespread{1.1}\ttfamily\footnotesize,
+    backgroundcolor=\color{light-gray},
+    commentstyle=\color{mygreen},
+    keywordstyle=\color{blue},
+    numbers=left,
+    %numbersep=10pt,
+    numberstyle=\tiny\color{mygray},
+    rulecolor=\color{black},
+    stringstyle=\color{mymauve},
+    xleftmargin=0.7cm,
+    frame=tlbr, framesep=0.2cm, framerule=0pt,
+    showstringspaces=false
+    }          
+
+\begin{document}
+
+\section{Introduction}
+In this project you will write a computer program in python to solve a set of first order differential equations, used to model a spherical symmetric star in hydrostatic equilibrium. Throughout the text there are \textbf{problems} labeled in bold, make sure you do all of them. Most of the text serve as  a review, so if your comfortable with the material you can go straight to the problems. Each student is expected to hand in their own solutions.
+
+\section{Physics}
+
+\subsection{Pressure Integral}
+Pressure is the force exerted on a given area. For gas, the pressure is due to the continual transfer of momentum by the gas particles. Consider a gas particle with momentum $p$ approaching the surface $dA$ at angle $\theta$ relative to the normal of the surface. The particle bounces off the surface elastically with momentum transfer of $2 p\mathrm{cos}\left(\theta\right)$ -- see Figure \ref{Fig: Momentum}.
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=1.0]{Images/Momentum}
+\end{center}
+\caption{A particle traveling towards the surface $dA$. The particles has momentum $pcos\left(\theta\right)$ along the normal of
+surface $dA$. The momentum transfer to the area is $\Delta p = 2pcos\left(\theta\right)$.}
+\label{Fig: Momentum}
+\end{figure}
+
+Now lets imagine a beam of particles, what is the momentum transfer now? The momentum transfer is simply $2 p\mathrm{cos}(\theta)$ times the total number of particles that bounce off the surface in a time $dt$. So what is the rate of particles bouncing off the surface? Let $n$ be the number density of the particles, so then the number of particles is $n$ times the volume enclosing the total amount of particles that can reach the surface $dA$ in a time $dt$. The furthest particle that can reach $dA$ has a distance $v \mathrm{cos}(\theta) dt$, where $v$ is the velocity of the particles. Hence, the volume is $v\mathrm{cos}(\theta) dt\times dA$ -- see Figure \ref{Fig: Beam}.
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=1.1]{Images/BeamParticles}
+\end{center}
+\caption{Beam of particles transferring momentum to the surface $dA$.}
+\label{Fig: Beam}
+\end{figure}
+Therefore we have the total momentum transfer
+\begin{equation*}
+\begin{split}
+dp & = (\mathrm{total\,\, particles})\times(\mathrm{momentum \,\, transfer}) \\
+& = (n v\mathrm{cos}(\theta)dt dA)\times(2p \mathrm{cos}(\theta)),
+\end{split}
+\end{equation*}
+
+\noindent
+and the momentum transfer per area per time is
+\begin{equation*}
+\frac{d^2 p}{dA dt} = 2 n v p \mathrm{cos}^2(\theta).
+\end{equation*}
+
+At this point we have only accounted for a single beam but the pressure is due to the net affect of all the beams. To add the contribution of all beams let $dn/d\theta$ be the number density of particles coming at angles between $\theta$ and $\theta + d\theta$. If the distribution of particles is isotropic, meaning the same for any given $\theta$, then the fraction of particles at angle $\theta$ to $\theta +d\theta$ is proportional to the strip of area of an imaginary sphere of unit radius that lies between $\theta$ and $\theta + d\theta$ -- see Figure \ref{Fig: Solid Angle}. 
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=1.1]{Images/SolidAngle}
+\end{center}
+\caption{Units sphere centered on $dA$. The fraction of particles at $\theta$ is proportional to the fraction of the solid angle that lies between $\theta$ and $\theta + d\theta$.}
+\label{Fig: Solid Angle}
+\end{figure}
+
+\noindent
+So the ratio of the area of the strip to the whole area must be equal to the number density fraction of particles coming at angles between $\theta$ and $\theta + d\theta$,
+
+\begin{equation*}
+\frac{dn/d\theta}{n} = \frac{\mathrm{area \,\, of \,\, strip}}{\mathrm{total \,\, area}} = \frac{2\pi \mathrm{\sin}(\theta) d\theta}{4\pi} =
+\frac{1}{2} \mathrm{sin}(\theta) d\theta.
+\end{equation*}
+
+\noindent
+So to take in account of all beams we have integrate over $\theta$
+
+\begin{equation*}
+\frac{d^2 p}{dA dt} = \int \frac{dn}{d\theta} 2 v p \mathrm{cos}^2(\theta) = \int_{0}^{\pi/2} \frac{1}{2} \mathrm{sin}(\theta) 2 n v p \mathrm{cos}^2 (\theta) d\theta.
+\end{equation*}
+
+\noindent
+Lets do the integral, 
+\begin{align*}
+\int_{0}^{\pi/2} \mathrm{sin}(\theta) n v p \mathrm{cos}^2 (\theta) d\theta & = nvp \int_{0}^{\pi/2} \mathrm{cos}^2 (\theta) d(-\mathrm{cos}(\theta)) \\
+& = -nvp \int_{1}^{0} x^2 dx = nvp \frac{x^3}{3} \bigg|_{0}^{1} \\
+& = \frac{1}{3} n p v.
+\end{align*}
+
+\noindent
+We are almost done, bear with me. Until this point our analysis has assumed that all the particles have the same momentum. To allow a distribution of momentum, we replace $n$ with $n(p)$ (number density of particles with momentum between $p$ and $p + dp$) and integrate over all momentum. Finally we have derived the pressure integral
+
+\begin{equation}
+\label{Eq. Pressure}
+\boxed{\mathrm{Pressure} = P = \int_{0}^{\infty} \frac{1}{3} n(p) p v dp.}
+\end{equation}
+
+\bigskip
+\noindent
+\textbf{Problem 1:}  For a classical gas the number density  of particles with momentum between $p$ and $p + dp$ is given by the Maxwell distribution
+\begin{equation*}
+n(p) = \frac{4 n p^2}{\pi^{1/2} (2 m k_B T)^{3/2}} e^{-p^2/(2 m k_B T)},
+\end{equation*}
+where $m$ is the mass of the gas particle, $k_B$ is the Boltzmann constant, and $T$ is the temperature. Use this distribution and the pressure integral, equation (\ref{Eq. Pressure}), to derive the pressure for a classical gas. Are you surprised?
+
+\bigskip
+\noindent
+\textbf{Problem 2:}  For an ordinary gas, the pressure is $P=nk_BT$. Hence the pressure vanishes when $T=0$. However, when electrons are compressed to very high densities, many electrons are forced to non-zero momentum even if $T=0$, due to the Pauli exclusion principle, thereby giving rise to degeneracy pressure. The number density  of particles with momentum between $p$ and $p + dp$ for an degenerate electron gas is
+\begin{equation*}
+n(p) = \frac{2}{h^3}4\pi p^2,
+\end{equation*}
+where $h$ is plank's constant. The velocity is related to the momentum, in the general relativistic form, as
+\begin{equation*}
+v=\frac{p}{m\gamma} =\frac{pc^2}{E}=\frac{pc^2}{\sqrt{p^2c^2+m_\mathrm{e}^2c^2}},
+\end{equation*}
+where $c$ is the speed of light and $m_\mathrm{e}$ is the electron mass. So our pressure integral has the following form
+\begin{equation*}
+\label{Eq. Degenerate Pressure}
+P = \frac{8\pi}{3h^3}\int_0^{p_F}\frac{p^4 c^2}{\sqrt{p^2 c^2+m_\mathrm{e}^2 c^2}}dp.
+\end{equation*}
+In the integral above, I have truncated the upper limit because the electrons only occupy the lowest momentum states. The upper momentum limit is given by
+\begin{equation*}
+p_F = \left(\frac{3h^3\rho}{16\pi m_\mathrm{p}}\right)^{1/3},
+\end{equation*}
+where $m_\mathrm{p}$ is the mass of the proton. Integrate the pressure integral for the relativistic limit, meaning the electrons are moving relativistically such that $pc \gg m_\mathrm{e}c^2$.
+
+
+
+\section{Mathematics}
+\subsection{Self-Gravitating Barotropic Fluids}
+An important situation in astrophysics is static equilibrium, where the pressure gradient balances the gravitational force. This situation can describe a static non-rotating star. In this case the fluid equations have the form
+\begin{align*}
+\nabla P & = -\rho \nabla \phi\\
+\nabla^2 \phi & = 4\pi G\rho.
+\end{align*}
+We can combine both equations
+\begin{align*}
+\nabla\cdot \left(\frac{\nabla P}{\rho} \right)= -4\pi G\rho.
+\end{align*}
+If we further assume the solution is spherically symmetric we have
+\begin{align}
+\label{Eq. Balance equaution}
+\frac{1}{r^2}\frac{d}{dr}\left(\frac{r^2}{\rho}\frac{dP}{dr}\right) = -4\pi G\rho.
+\end{align}
+We cannot integrate this equation until we have a relation that relates the pressure and the density, $P=P\left(\rho\right)$. Two situations that meet this criteria is isothermal and degenerate gas. Fluids that have an equation of state of the form $P=P\left(\rho\right)$, are called baratropic fluids. Lets write the pressure equation in the following form
+\begin{equation}
+\label{Eq. Barotropic}
+P = K \rho^{(n+1)/n},
+\end{equation}
+where $K$ and $n$ are constants.
+
+\bigskip
+\noindent
+\textbf{Problem 3:}
+In problem 2 you solved the pressure integral for a degenerate gas, what are $K$ and $n$ for this pressure equation?\\
+
+ It is common practice to scale out unwanted constants, this allows the computation to be simpler without worrying about very large or small constants. Lets introduce new variables $\xi$ and $\theta$,
+%\begin{subequations}
+%\label{Eq. Scaling}
+\begin{align*}
+r & = \alpha \xi\\ %\label{Eq. Scaling radius}\\
+\rho & = \rho_c \theta^n %\label{Eq. Scaling density},
+\end{align*}
+%\end{subequations}
+where $\alpha$ and $\rho_c$ are constants.
+
+\bigskip
+\noindent
+\textbf{Problem 4:} Work out the expression for $d/dr$ and $dP/dr$, using equation (\ref{Eq. Barotropic}) and the new variables expressed above. Then substitute your answers into equation (\ref{Eq. Balance equaution}). Your answer should have the following form
+\begin{align*}
+\frac{1}{\xi^2}\frac{d}{d\xi}\left(\xi^2\frac{d\theta}{d\xi}\right) = \frac{-4\pi G \rho_c^{1-1/n} \alpha^2}{K(n+1)} \theta^n.
+\end{align*}
+Figure out what value $\alpha$ should have to give the following result
+\begin{align}
+\label{Eq. Lane Emden}
+\boxed{\frac{1}{\xi^2}\frac{d}{d\xi}\left(\xi^2\frac{d\theta}{d\xi}\right) = - \theta^n.}
+\end{align}
+
+Lets recap what we have done so far. We used the fluid equations coupled with gravity, assuming spherical symmetry and that the pressure solely depends on the density, to derive a single equation that describes the static configuration of a star, where the pressure force balances the gravitational force. At this point we have a reduced a physical problem into a mathematical problem, which all is left is to solve this second order differential equation. 
+
+\subsection{Initial Conditions and Scaling}
+You are almost at the point where you can solve equation (\ref{Eq. Lane Emden}) but before we can turn the numerical crank we need appropriate initial conditions. At the origin of the star we have a central density $\rho_c$ and the force vanishing. This can be formulated as
+\begin{align*}
+\rho(r=0) &=\rho_c\theta(\xi=0)^n = \rho_c\\
+\frac{dP}{dr}(r=0) & =\rho_c\frac{d\theta^n}{dr}(\xi=0) = 0.
+\end{align*}
+Therefore the appropriate initial conditions for our scaled quantities are
+\begin{align}
+\label{Eq. Initial Conditions 1}
+\theta(\xi=0) &= 1\\
+\label{Eq. Initial Conditions 2}
+\frac{d\theta}{dr}(\xi=0) &=0.
+\end{align}.
+
+Once you solve the equation (\ref{Eq. Lane Emden}) you will need to scale the solution to the appropriate units using
+\begin{align*}
+r & = \alpha \xi \\
+\rho & = \rho_c \theta^n.
+\end{align*}
+Further you can derive the total mass of the star by
+\begin{align*}
+M &= \int_0^R \rho 4\pi r^2 dr =4\pi\alpha^3\rho_c \int_0^{\xi_1} \theta^n \xi^2 d\xi \\
+& = -4\pi\alpha^3\rho_c \int_0^{\xi_1} \frac{d}{d\xi}\left(\xi^2 \frac{d\theta}{d\xi}\right) d\xi\\
+& = -4\pi\alpha^3\rho_c \left(\xi^2 \frac{d\theta}{d\xi}\right)\bigg|_0^{\xi_1}\\
+M & = -4\pi\alpha^3\rho_c \left(\xi^2 \frac{d\theta}{d\xi}\right)\bigg|_{\xi_1}\\
+\end{align*}
+where I used equation (\ref{Eq. Lane Emden}) to evaluate the integral and $\xi_1$ corresponds to the radius of the star, $R=\alpha \xi_1$ .
+
+\section{Numerical}
+\subsection{Runge Kutta -- First Order Differential Equations}
+In class we talked about numerically solving differential equations by using Taylor expansions. Specifically, we mentioned the set of solvers called Runge-Kutta methods. Let's derive the second order Runge-Kutta method. Say we have the following first order differential equation
+\begin{equation*}
+\frac{dx}{dt} = f(x,t)
+\end{equation*}
+and we would like to solve it numerically. Starting with the initial value $x\left(t_0\right)$, we want to progress to $x\left(t_0 + h\right)$, where $h$ is our step size. We can perform a Taylor expansion around $t_0+\frac{1}{2}h$ in order to get the value of $x\left(t_0+h\right)$,
+\begin{equation*}
+x\left(t_0+h\right) = x(t_0+\frac{1}{2}h) + \frac{1}{2}h\frac{dx}{dt}\bigg|_{t_0+\frac{1}{2}h}+\frac{1}{8}h^2\frac{d^2x}{dt^2}\bigg|_{t_0+\frac{1}{2}} + \mathcal{O}\left(h^3\right).
+\end{equation*} 
+Similarly we can derive a relation for $x\left(t_0\right)$ by expanding backwards from $x\left(t_0+h\right)$,
+\begin{equation*}
+x\left(t_0\right) = x(t_0+\frac{1}{2}h) - \frac{1}{2}h\frac{dx}{dt}\bigg|_{t_0+\frac{1}{2}h}+\frac{1}{8}h^2\frac{d^2x}{dt^2}\bigg|_{t_0+\frac{1}{2}} + \mathcal{O}\left(h^3\right).
+\end{equation*} 
+Subtracting the above equations and rearranging terms we have the following equation,
+\begin{equation*}
+x\left(t_0+h\right) = x\left(t\right) + h\frac{dx}{dt}\bigg|_{t_0+\frac{1}{2}h} + \mathcal{O}\left(h^3\right).
+\end{equation*}
+The term proportional to $h^2$ has dropped out leaving our error to $\mathcal{O}\left(h^3\right)$. However, we are not done yet because we do not know $x\left(t_0+\frac{1}{2}h\right)$ for the expression
+\begin{equation*}
+\frac{dx}{dt}\bigg|_{t_0+\frac{1}{2}h} = f\left(x(t_0+\frac{1}{2}h), t_0+h\right),
+\end{equation*}
+we only know the value of $x\left(t_0\right)$. We get around this by using Euler's method, $x(t_0+\frac{1}{2}h) = x(t_0) + \frac{1}{2}hf(x_0, t_0)$ and then substitute in the equation above. It is common practice to label all these terms in the following way, $k_1 = hf(x_0, t_0)$ and $k_2 = hf(x_0+\frac{1}{2}k_1, t_0 + \frac{1}{2}h)$. So that one step in our algorithm takes the form:
+\begin{align*}
+k_1 & = hf(x, t)\\
+k_2 & = hf(x +\frac{1}{2}k_1, t + \frac{1}{2}h)\\
+x(t+h) & = x(t) + k_2.
+\end{align*}
+Thus we have derived the second order Runge-Kutta method. However, we can do even better, although I will not derive it,  by using a fourth order Runge-Kutta method:
+\begin{align*}
+k_1 & = hf(x, t)\\
+k_2 & = hf(x +\frac{1}{2}k_1, t + \frac{1}{2}h)\\
+k_3 & = hf(x+\frac{1}{2}k_2, t+\frac{1}{2}h)\\
+k_4 & = hf(x+k_3, t+h)\\ 
+x(t+h) & = x(t) + \frac{1}{6}(k_1 + 2k_2+2k_3+k_4).
+\end{align*}
+For your problems in this project use the fourth oder Runge-Kutta algorithm.
+
+\subsection{Runge Kutta -- Second Order Differential Equations}
+
+The Runge-Kutta method we derived in the last section is for first order differential equations, however equation (\ref{Eq. Lane Emden}) is a second order equation. This is not a problem, we can reduce a second order differential equation into a system of first order differential equation. For example, say we want to solve the following differential equation
+\begin{equation}
+\frac{d^2x}{dt^2} = f(x, \frac{dx}{dt}, t).
+\end{equation}
+We make the following substitution,
+\begin{equation}
+y = \frac{dx}{dt},
+\end{equation}
+so then our second order differential equation splits into a system of two first order differential equations:
+\begin{align*}
+\frac{dx}{dt} & = y\\
+\frac{dy}{dt} & = f(x,y,t).
+\end{align*}
+We have a system of differential equations, so let's define
+\begin{align*}
+\mathbf{r} & = (x, y)\\
+\mathbf{f} & = (y, f(x,y,t)),
+\end{align*}
+so that our equations have the following form in vector notation
+\begin{equation*}
+\frac{d\mathbf{r}}{dt} = \mathbf{f}.
+\end{equation*}
+The trick is that our new vector $\mathbf{r}$ is only a function of $t$. So we can apply the same derivation from the last section, except our terms are promoted to vector quantities. For example, the first terms in the Taylor expansion of $\mathbf{r}$ is
+\begin{equation*}
+\mathbf{r}(t+h) = \mathbf{r}(t) + h\frac{d\mathbf{r}}{dt} + \mathcal{O}\left(h^2\right) = \mathbf{r}(t) + h\mathbf{f}(\mathbf{r}, t) + \mathcal{O}\left(h^2\right).
+\end{equation*}
+So then our fourth order Runge-Kutta scheme for a system of first order differential equations will be
+\begin{align}
+\label{Eq. Runge-Kutta k1}
+\mathbf{k_1} &= \mathbf{f}(\mathbf{r}, t)\\
+\label{Eq. Runge-Kutta k2}
+\mathbf{k_2} &= \mathbf{f}(\mathbf{r} +\frac{1}{2}\mathbf{k_1}, t+\frac{1}{2}h)\\
+\label{Eq. Runge-Kutta k3}
+\mathbf{k_3} &= \mathbf{f}(\mathbf{r} +\frac{1}{2}\mathbf{k_2}, t+\frac{1}{2}h)\\
+\label{Eq. Runge-Kutta k4}
+\mathbf{k_4} &= \mathbf{f}(\mathbf{r} +\mathbf{k_3}, t+h)\\
+\label{Eq. Runge-Kutta}
+\mathbf{r}(t+h) &= \mathbf{t}+\frac{1}{6}(\mathbf{k_1}+2\mathbf{k_2}+2\mathbf{k_3}+\mathbf{k_4}),
+\end{align}
+where the $\mathbf{k}$'s are now vector quantities. In the last page of this document there is a partial implementation of this scheme in python, refer to it if you are having trouble coding this scheme.
+
+Your now have all the tools to numerically integrate equation (\ref{Eq. Lane Emden}) with initinial conditions (\ref{Eq. Initial Conditions 1}-\ref{Eq. Initial Conditions 2}), with the fourth order Runke Kutta scheme (\ref{Eq. Runge-Kutta k1}-\ref{Eq. Runge-Kutta}).
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.5]{Images/Polytropes}
+\end{center}
+\caption{Equation (\ref{Eq. Lane Emden}) numerically integrated for $n=0$ and $n=1$. For comparison, the exact solutions are plotted.}
+\label{Fig: Polytropes}
+\end{figure}
+
+\section{Remaining Problems}
+\bigskip
+\noindent
+\textbf{Problem 5:} Integrate equation (\ref{Eq. Lane Emden}) for $n=0$ and $n=1$. Your integration should start from the center to the radius of the star; the radius is defined where density vanishes. Compare your numerical result with the analytic solution by making a plot, your plot should look like Figure \ref{Fig: Polytropes}. Note: you will notice that the differential equation blows up at the origin. To get around this start the integration one step away from the origin.
+
+\bigskip
+\noindent
+\textbf{Problem 6:} Integrate equation (\ref{Eq. Lane Emden}) for the degenerate electron gas, remember you showed in problem 3 that pressure equation can be put in terms of $K$ and $n$. Further evaluate the mass of the star, quote your answer in units of stellar mass $M_{\odot}$. It turns out this is the maximum possible mass for a white dwarf, a stellar remnant composed mostly of electrong-degenerate matter with mass comparable to the sun and volume comparable to the Earth. The mass is called the \textit{Chandrasekhar mass limit} and was calculated by the famous astrophysicist Subrahmanyan Chandrasekhar in 1930 when he was 19. Now you have calculated it, very impressive!
+
+
+\newpage
+%\lstinputlisting[language=Python, caption=format, firstline=37, lastline=45,style=FormattedNumber]{Sedov.py}
+\lstinputlisting[language=Python, label=RungeKutta, caption=rungekutta.py, style=FormattedNumber]{runge_kutta.py}
+
+\end{document}

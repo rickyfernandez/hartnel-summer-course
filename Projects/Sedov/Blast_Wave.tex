@@ -1,0 +1,309 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{listings}             % Include the listings-package
+\usepackage{color}
+\usepackage{xcolor}
+%\usepackage[scaled]{beramono}
+\usepackage{tgheros}
+\usepackage{empheq}
+%\uspackage{mathtools}
+
+
+\usepackage{caption}
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\definecolor{light-gray}{gray}{0.9}
+
+\lstdefinestyle{FormattedNumber}{%
+    literate={0}{{\textcolor{purple}{0}}}{1}%
+             {1}{{\textcolor{purple}{1}}}{1}%
+             {2}{{\textcolor{purple}{2}}}{1}%
+             {3}{{\textcolor{purple}{3}}}{1}%
+             {4}{{\textcolor{purple}{4}}}{1}%
+             {5}{{\textcolor{purple}{5}}}{1}%
+             {6}{{\textcolor{purple}{6}}}{1}%
+             {7}{{\textcolor{purple}{7}}}{1}%
+             {8}{{\textcolor{purple}{8}}}{1}%
+             {9}{{\textcolor{purple}{9}}}{1}%
+             {.0}{{\textcolor{purple}{.0}}}{2}% Following is to ensure that only periods
+             {.1}{{\textcolor{purple}{.1}}}{2}% followed by a digit are changed.
+             {.2}{{\textcolor{purple}{.2}}}{2}%
+             {.3}{{\textcolor{purple}{.3}}}{2}%
+             {.4}{{\textcolor{purple}{.4}}}{2}%
+             {.5}{{\textcolor{purple}{.5}}}{2}%
+             {.6}{{\textcolor{purple}{.6}}}{2}%
+             {.7}{{\textcolor{purple}{.7}}}{2}%
+             {.8}{{\textcolor{purple}{.8}}}{2}%
+             {.9}{{\textcolor{purple}{.9}}}{2}%
+     % ,
+   %basicstyle=\ttfamily,%  Optional to use this
+}
+
+
+
+\lstset{    % Set your language (you can change the language for each code-block optionally)
+    language=Python,
+    basicstyle=\linespread{1.1}\ttfamily\footnotesize,
+    backgroundcolor=\color{light-gray},
+    commentstyle=\color{mygreen},
+    keywordstyle=\color{blue},
+    numbers=left,
+    %numbersep=10pt,
+    numberstyle=\tiny\color{mygray},
+    rulecolor=\color{black},
+    stringstyle=\color{mymauve},
+    xleftmargin=0.7cm,
+    frame=tlbr, framesep=0.2cm, framerule=0pt
+    }          
+
+\begin{document}
+
+%\begin{figure}[h!]
+%\begin{center}
+%\includegraphics[scale=0.1]{Figures/Tycho-supernova-xray}
+%\end{center}
+%\caption{Diagram of a plane shock in a frame where the shock speed is zero. Note our notation for velocity is $v$ not $u$}
+%\label{Fig: Tycho SNR}
+%\end{figure}
+
+\section{Introduction}
+
+\section{Physics}
+\subsection{Rankine-Hugoniot Conditions}
+In class we derived the Euler equations:
+\begin{gather}
+\label{eq: continuity equation}
+\frac{\partial\rho}{\partial t} +\nabla\cdot(\rho\vec{v})=0 \\
+\label{eq: momentum equation}
+\rho\frac{\partial\vec{v}}{\partial t}+\rho(\vec{v}\cdot\nabla)\vec{v}=-\nabla p \\
+\label{eq: energy equation}
+\frac{\partial E}{\partial t} + \nabla\cdot \left[ \left( E+p\right) \vec{v}\right]  = 0
+\end{gather}
+where $E=\frac{1}{2}\rho v^{2} + \rho u$ is the total energy per volume, the sum of kinetic energy and internal energy per volume. Coupled with an equation of state $p = p\left(\rho, T\right)$ our system of equations is closed.
+
+In astrophysical systems, the propagation of shock waves occur frequently, for example in a supernova explosion. Shock waves are abrupt, nearly  discontinuous, changes in the flow. Our current form of the Euler equations cannot handle discontinuities. Therefore, we have to supplement our equations with the appropriate conditions at the shock front. 
+
+Let us idealize the surface of the discontinuity as a plane moving to the right, see Figure \ref{fig: Shock}. We want to apply the Euler equations across the shock front. The problem is one dimensional so we write the Euler equations with our axis perpendicular to the shock. Further, to simplify our analysis we move from our laboratory frame to the frame where the shock is stationary. So in our new frame, the shock is at the origin separating two states of the fluid, left the post-shock gas and right the pre-shock gas.
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=1.25]{Figures/Rankine_Hugoniot_Shock}
+\end{center}
+\caption{Diagram of a plane shock in a frame where the shock speed is zero. In the laboratory frame the shock is traveling in the right direction}
+\label{fig: Shock}
+\end{figure}
+
+We now have to relate our variables in the laboratory frame to the shock frame. Let us label our laboratory pre-shock values as $\hat{v_2}$, $\hat{\rho_2}$, $\hat{T_2}$ and post-shock values as $\hat{v_1}$, $\hat{\rho_1}$, $\hat{T_1}$. To transform to the laboratory frame we must subtract the shock speed, $v_s$ from both $v_1$ and $v_2$. Now the density $\hat{\rho}$ and temperature $\hat{T}$ are scalar quantities and are unaffected in the frame transformation (i.e. $\hat{\rho} = \rho$ and $\hat{T} = T$). 
+
+Now to relate the pre-shock and post-shock quantities we start with the continuity equation (eq. \ref{eq: continuity equation}) and Integrating it over an infinitesimal length $dx$,
+\begin{gather}
+\int_{-dx/2}^{dx/2} \left(\frac{\partial}{\partial t}\rho + \frac{\partial}{\partial x}\left(\rho v\right)\right)dx = 0\\
+\frac{\partial}{\partial t} \int_{-dx/2}^{dx/2} \rho dx + \rho v\bigg|_{-dx/2}^{dx/2}=0.
+\end{gather} 
+Here we assumed the shock to be steady, non changing in the rest frame the shock, therefore all $\partial/\partial t$ are zeros and we are left with $\rho_1 v_1 = \rho_2 v_2$. Similarly, we can repeat the analysis on the momentum and energy equation. Our results are known as the Rankine-Hugoniot conditions:
+\begin{gather}
+\label{eq: density condition}
+\rho_1 v_1 = \rho_2 v_2\\
+\label{eq: momentum condition}
+\rho v_1^2 +p_1 = \rho v_1^2 +p_1\\
+\label{eq: energy condition}
+\frac{1}{2} v_1^2 + u_1 + \frac{p_1}{\rho_1} = \frac{1}{2} v_2^2 + u_2 + \frac{p_2}{\rho_2}
+\end{gather}
+These expression merely express the conservation laws. The first, the conservation of mass, the second the conversion of ram pressure to thermal pressure, and the third the conversion of kinetic energy to enthalpy.
+
+Now that we have the Rankine conditions we would like to put them in a form that would be more useful for analysis. Specifically, we would like to have them in a form where the ratio of post-shock to pre-shock depends only on the Mach number $M$, ratio of the flow speed to sound speed, and the ratio of specific heats, $\gamma$. After a bit of algebra we have the following result,
+\begin{gather}
+\label{eq: density ratio}
+\frac{\rho_1}{\rho_2}  = \frac{\left(\gamma+1\right)M^2}{\left(\gamma-1\right)M^2+2}\\
+\label{eq: momentum ratio}
+\frac{p_1}{p_2} = \frac{1+\gamma\left(2 M^2-1\right)}{\gamma+1}\\
+\label{eq: temperature ratio}
+\frac{T_1}{T_2} = \frac{\left(\left(\gamma-1\right)M^2+2\right)\left(1+\gamma\left(2M^2-1\right)\right)}{\left(\gamma+1\right)^2M^2}.
+\end{gather}
+
+Notice the behavior of equation (\ref{eq: density ratio}) as $M$ varies. If $M >1$ then $\rho_1/\rho_2$ is greater than 1 and increases with increasing $M$. Thus the gas behind the shock is always compressed and becomes further compressed for a faster moving shock. When $M = 1$ then $\rho_1 = \rho_2$ and therefore the shock disappears. Further, the gas has a maximum compression value when $M\rightarrow\infty$,
+\begin{equation}
+\label{eq: density ratio limit}
+\frac{\rho_1}{\rho_2} \rightarrow \frac{\gamma + 1}{\gamma - 1}.
+\end{equation}
+For $\gamma = 5/3$ the maximum compression is 4, thus if a disturbance compress the gas by a factor of 4 a shock develops moving with an infinite speed.
+
+
+\subsection{Blast Wave}
+A sudden release of large amount of energy $E$ creates a strong explosion, characterized by a strong shock wave, which progress in an ambient medium of density $\rho$. This is a natural model for supernova explosions or atomic bombs. We would like to know how fast will the shock propagate and how quantities like density or velocity vary with radius and time. We can find the behavior of the shock radius $R(t)$, if we assume that the blast was evolves if a self-similar fashion, we will justify this in the next section. That is, the evolution of some initial configuration expands uniformly. So later times must appear as enlargement of the previous configuration. Let $\lambda$ be a scale parameter characterizing the size of the blast wave at time $t$ after the explosion. The dimensions of the problem are:
+\begin{align*}
+[E] &= \mathrm{\frac{ML^2}{T^2}}\\
+[\rho] &= \mathrm{\frac{M}{L^3}}\\
+[t] &= \mathrm{T}.
+\end{align*}
+To produce a dimension of length, the only possible combination is
+\begin{equation}
+\lambda = \left(Et^2/\rho\right)^{1/5}.
+\end{equation}
+Since our solution is self-similar, any shell of gas with radius $r$ has to evolve in the same way  as $\lambda$. Thus we introduce a dimensionless distant parameter
+\begin{equation}
+\xi = \frac{r}{\lambda}=r\left(\frac{Et^2}{\rho}\right)^{1/5}.
+\end{equation}
+Therefore each shell can be labeled by a particular $\xi$. Let $\xi_s$ designate the shock front so that radius of the blast wave is given by
+\begin{equation*}
+\label{eq: shock radius}
+R(t) = \xi_s \left(\frac{Et^2}{\rho}\right)^{1/5}
+\end{equation*}
+The velocity of the shock front follows by time differentiation
+\begin{equation*}
+v_s(t) = \frac{dr_s}{dt} = \frac{2}{5}\frac{r_s}{t} = \frac{2}{5} \xi_s \left(\frac{E}{\rho t^3}\right)^{1/5}.
+\end{equation*}
+So we have found that the shock front increases as $t^{2/5}$ and the velocity decreases as $t^{-3/5}$. Figure \ref{fig: Atomic Bomb} shows confirmation of the $t^{5/2}$ dependence for the first atomic explosion in New Mexico in 1945.
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=1.0]{Figures/Taylor_atomic}
+\end{center}
+\caption{Plot showing the $R(t) \propto t^{5/2}$ relation for the first atomic explosion.}
+\label{fig: Atomic Bomb}
+\end{figure}
+
+\section{Mathematics}
+\subsection{Differential Equations for the Blast Wave}
+We are now left to solve the Euler equations. The Euler equations in spherical coordinates are
+\begin{gather}
+\frac{\partial \rho}{\partial t} + \frac{1}{r^2}\frac{\partial}{\partial r}\left(r^2 \rho v\right) = 0\\
+\rho\left(\frac{\partial}{\partial t} + v\frac{\partial}{\partial r}\right)v + \frac{\partial P}{\partial r} = 0\\
+\left(\frac{\partial}{\partial t} + v\frac{\partial}{\partial r}\right) \frac{P}{\rho^\gamma} = 0.
+\end{gather}
+The last equation is the conservation of entropy which we replaced the energy equation.
+
+As usual we should scale out the dimensions of the problem by defining new dimensionless functions. You should convince yourself that the following new functions are dimensionless:
+\begin{align}
+f(x) &= \rho/\rho_0\\
+g(x) &= \frac{v}{(R_s/t)}\\
+h(x) &= \frac{P}{\rho_0(R_s/t)^2}\\
+\end{align}
+Our new functions $f(x)$, $g(x)$, and $h(x)$ represent the dimensionless density, velocity, and pressure respectively and are functions of the dimensionless scale length $x=r/R_s$. 
+
+\bigskip
+\noindent
+\textbf{Problem 1:} Substitute expressions into to derive the Euler equations in term of our new functions $f(x)$, $g(x)$, and $h(x)$. Hint: you might find it easier to first work out all the derivatives first by using the chain rule and then plugging them into. For example to calculate $\partial \rho/\partial t$, you would first calculate $\partial x/ \partial t$,
+\begin{equation}
+\frac{\partial x}{\partial t} = \frac{\partial}{\partial} \xi_0^{-1}\left(\frac{\rho_0}{E}\right)^{1/5} t^{-2/5} r = -\frac{2}{5}\frac{x}{t},
+\end{equation}
+and then use the chain rule
+\begin{equation}
+\frac{\partial\rho}{\partial t} = \frac{\partial \rho}{\partial x}\frac{\partial x}{\partial t} = \frac{\partial \left(\rho_0 f(x)\right)}{\partial x}=-\frac{2}{5}\frac{\rho_0 x}{t} \frac{\partial f(x)}{\partial x}.
+\end{equation}
+Your final answer after should be
+\begin{empheq}[box=\fbox]{align}
+\label{eq: diff eq 1}
+10fg + 5x(f'g + fg')-2x^2g &=0\\
+\label{eq: diff eq 2}
+(5gg'-2xg'-3g)f+5h' &=0\\
+\label{eq: diff eq 3}
+(fh'-\gamma h f')(5g-2x)-6hf &=0,
+\end{empheq}
+where I suppressed the $x$ dependence and the prime symbol means differentiation respect to $x$.
+
+\subsection{Initial Conditions}
+
+Now we just need the initial conditions to start the integration to solve for $f(x)$, $g(x)$, and $h(x)$. Lets put our coordinate system at the center of the blast wave. The blast wave expands from the origin with the shock wave as a spherical shell. Lets looks at the shock front along the positive x-axis. From this point of view the shock has a positive velocity since its flowing along the positive x-axis. If we zoom in infinitesimally, the circular shock can be treated as a plane shock, see Figure \ref{fig: point and shock}. 
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=1.25]{Figures/Point_shock}
+\end{center}
+\caption{Diagram of a plane shock in a frame where the shock speed is zero. In the laboratory frame the shock is traveling in the right direction}
+\label{fig: point and shock}
+\end{figure}
+We can now use the Rankine-Hugoniot conditions on the shock. Exterior to the shock is our background values, the state of the system before the explosion. Our background values are the density $\rho_1 = \rho_0$, velocity $v_1=0$, and pressure $P_1$. Interior to the shock is our unknown values $\rho_2$, $v_2 = v - v_s$, and $P_2$. Remember these values are in the frame of the shock, specifically only the velocities are affected in the transformation. Now we make the following assumption on the structure of the explosion. We suppose it's a strong explosion, meaning we use equation (\ref{eq: density ratio limit}). Now we can solve for the initial conditions, for example the initial condition at the shock for $f(x)$ is
+\begin{gather}
+\rho(R_s) = \rho_2 = \rho_1 f(1) = \rho_1\frac{\gamma+1}{\gamma-1}\\
+\label{eq: density initial condition}
+\boxed{\Rightarrow f(1) = \frac{\gamma +1}{\gamma -1}}.
+\end{gather}
+You can do the same in order to find the initial conditions for $g(x)$ and $h(x)$.
+
+\bigskip
+\noindent
+\textbf{Problem 2:}
+Find the initial conditions for $g(x)$ and $h(x)$. For $g(x)$ you should use equation (\ref{eq: density condition}) and (\ref{eq: density ratio}). Remember $v_1 = -v_s$, since this the initial velocity of the gas is assumed to be stationary and the velocity just behind the shock $v_2 = v - v_s$. For $h(x)$ use equation (\ref{eq: momentum condition}) and ignoring $P_1 \approx 0$ since we are assuming a strong shock. Your answers should be
+\begin{empheq}[box=\fbox]{align}
+\label{eq: velocity initial condition}
+g(1) & = \frac{4}{5}\frac{1}{\gamma + 1}\\
+\label{eq: pressure initial condition}
+h(1) & = \frac{8}{25}\frac{1}{\gamma + 1}.
+\end{empheq}
+
+You may have noticed we derived our differential equations (\ref{eq: diff eq 1}-\ref{eq: diff eq 3}) but we have completely ignored the constant $\xi_s$. You can see from equation (\ref{eq: shock radius}) we need $\xi_s$ to evaluate the radius of the shock. We can solve for $\xi_s$ by conservation of energy in the blast wave,
+\begin{align*}
+E &= \int_0^{Rs}\left(\frac{1}{2}\rho v^2 + \frac{P}{\gamma - 1}\right) 4\pi r^r dr\\
+   &= \int_0^{1}\left(\frac{1}{2}\rho_0 f(x) \left(\frac{g(x) R_s}{t}\right)^2 + \frac{h(x)\rho_0}{\gamma - 1} \left(\frac{R_s}{t}\right)^2\right) 4\pi \left( xR_s\right)^2 R_s dx\\
+   &= \rho_0 \frac{R_s^5}{t^2} \int_0^{1}\left(\frac{1}{2} f(x) g(x)^2 + \frac{h(x)}{\gamma - 1} \right) 4\pi x^2 dx\\ 
+   &= \frac{\rho_0\xi_s^5}{t^2} \left(\frac{Et^2}{\rho_0} \right) \int_0^{1}\left(\frac{1}{2} f(x) g(x)^2 + \frac{h(x)}{\gamma - 1} \right) 4\pi x^2 dx,
+\end{align*}
+solving for $\xi_s$ we have
+\begin{equation}
+\label{eq: xi integral}
+ \boxed{\Rightarrow \xi_s = \left[4 \pi \int_0^1 \left(\frac{1}{2}f(x)g(x)^2 + \frac{h(x)}{\gamma - 1}\right)x^2dx\right]^{-1/5}.}
+\end{equation}
+\section{Numerical}
+\subsection{Solving System of First Order Differential Equations}
+You are now ready to solve equations (\ref{eq: diff eq 1}-\ref{eq: diff eq 3}) with initial conditions (\ref{eq: density initial condition}-\ref{eq: pressure initial condition}) by the Runge-Kutta method that we have learned. Let's write our system of differential equations in vector form
+\begin{align}
+\mathbf{r} &= \left(f, g, h\right)\\
+\mathbf{f} &= \left(f'(x, f, g, h), g'(x, f, g, h), h'(x, f, g, h)\right),
+\end{align}
+so that our equations become
+\begin{equation}
+\frac{d\mathbf{r}}{dt} = \mathbf{f}.
+\end{equation}
+However our equations (\ref{eq: diff eq 1}-\ref{eq: diff eq 3}) are coupled, we need to solve for $f'$, $g'$, $h'$ in terms of $x$, $f$, $g$, and $h$. To save you time, I have solved it for you and the result is
+\begin{empheq}[box=\fbox]{align}
+\label{eq: density diff eq}
+f' &= \frac{-5f\left(fg(5g-2x)(10g-x)-30hx\right)}{x\left(5g-2x\right)\left(f(5g-2x)^2-25\gamma h\right)}\\
+\label{eq: velocity diff eq}
+g' &= \frac{-30hx + 3fg(5g-2x) + 50\gamma gh}{x\left(f(5g-2x)^2 - 25\gamma h\right)}\\
+\label{eq: pressure diff eq}
+h' &= \frac{fh\left(6(5g-2x)x + 5g(x-10g)\gamma\right)}{x\left((5g-2x)^2-25\gamma h\right)}
+\end{empheq}
+
+\bigskip
+\noindent
+\textbf{Problem 3:} Integrate equations (\ref{eq: density diff eq}-\ref{eq: pressure diff eq}) with initial conditions (\ref{eq: density initial condition}-\ref{eq: pressure initial condition}) using the Runge-Kutta scheme. Remember you are integrating from the shock front to the origin.
+
+\subsection{Numerical Integration}
+Once you solved for $f$, $g$, and $h$ you can use them to solve for $\xi_s$ by (\ref{eq: xi integral}). You will have to do a numerical integration. Let's review Simpson rule of integration that we went over in class. In the Simpson rule, we approximate the area under the curve of $y=f(x)$ by a series of strips that have a quadratic interpolation-- see Figure 
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.2]{Figures/Simpson_rule}
+\end{center}
+\caption{Plot showing the $R(t) \propto t^{5/2}$ relation for the first atomic explosion.}
+\label{fig: Simpson rule}
+\end{figure}
+
+\section{Remaining Problems}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.3]{Figures/Blast_wave}
+\end{center}
+\caption{Plot showing the $R(t) \propto t^{5/2}$ relation for the first atomic explosion.}
+\label{fig: Blast wave solution}
+\end{figure}
+
+
+
+
+%Below is a code snippet:
+%\lstinputlisting[language=Python, caption=format, firstline=37, lastline=45,style=FormattedNumber]{Sedov.py}
+%\lstinputlisting[language=Python, label=Sedov, caption=Sedov.py, style=FormattedNumber]{Sedov.py}
+%\begin{lstlisting}[frame=single]  % Start your code-block
+%N = 10
+%x = range(N)
+%for i in x:
+%    print x
+%\end{lstlisting}
+
+\end{document}
