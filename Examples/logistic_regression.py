@@ -48,7 +48,7 @@ theta = op.minimize(fun=cost_function, x0=initial_theta,
         args=(X,y), method="TNC", jac=gradient)
 
 # find decision boundary by setting z=x*theta=0 that is 
-# the values of x such that the probability p=sigmoid(z)>=0.5
+# the values of x such that the probability p=sigmoid(z)=0.5
 x_b = np.array([np.min(x[:,0])-2, np.max(x[:,0])+2])
 y_b = -(theta.x[0]+theta.x[1]*x_b)/theta.x[2]
 
@@ -56,16 +56,14 @@ y_b = -(theta.x[0]+theta.x[1]*x_b)/theta.x[2]
 p = sigmoid(np.dot(X, theta.x)) >= 0.5
 print "\naccuracy of logistic regression: %.1f%%" % (np.sum(p == y)/float(m)*100.)
 
-plt.plot(x[i,0], x[i,1], 'oy')
-plt.plot(x[j,0], x[j,1], 'or')
-plt.plot(x_b, y_b, "b")
+plt.plot(x[i,0], x[i,1], 'ob', alpha=0.7)
+plt.plot(x[j,0], x[j,1], 'or', alpha=0.7)
+plt.plot(x_b, y_b, "k")
 
 plt.xlabel("Exam 1 score")
 plt.ylabel("Exam 2 score")
 plt.title("Logistic Regression")
-
-l = plt.legend(["Admitted", "Not Admitted", "Regression"], prop={'size':12})
-#l.draw_frame(False)
+plt.legend(["Admitted", "Not Admitted", "Regression"], prop={'size':12})
 
 plt.xlim(30, 100)
 plt.ylim(30, 100)
