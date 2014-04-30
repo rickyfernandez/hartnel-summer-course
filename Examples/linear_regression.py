@@ -39,6 +39,14 @@ gradient_descent(X, y, theta, alpha, 1500)
 plt.plot(x, y, 'or')
 plt.plot(x, 2.*x + 1, 'b')
 plt.plot(x, np.dot(X, theta), 'r')
+
+l = plt.legend(["Data points", r"$f(x)$", "Regression"], prop={'size':12})
+l.draw_frame(False)
+
+plt.xlabel("x")
+plt.ylabel("y")
+plt.title(r"Linear Regression: $y=f(x)+\epsilon$")
+
 plt.xlim(0, 2)
 plt.ylim(0, 7)
 plt.show()
