@@ -5,9 +5,9 @@ projects and ten programming examples.
 
 ## Projects
 1. Polytropes
-...Numerically intgrating the Lane-Emden equation using Runge-Kutta method.
+*Numerically intgrating the Lane-Emden equation using Runge-Kutta method.
 2. Blast Wave
-...Numerically integrating the Euler equations for a point explosion.
+*Numerically integrating the Euler equations for a point explosion.
 
 ## Examples
 1. Bais of a coin using Bayes Theorem
