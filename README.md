@@ -11,7 +11,8 @@ projects and ten programming examples.
 
 ## Examples
 1. Electric potential plot
-2. ODE integration of a pendulm using Cromer method
-3. Linear Regression
-4. Logistic Regression 
-5. Bias of a coin using Bayes Theorem
+2. ODE integration of projectile using Euler method
+3. ODE integration of a pendulm using Cromer method
+4. Linear Regression
+5. Logistic Regression 
+6. Bias of a coin using Bayes Theorem
