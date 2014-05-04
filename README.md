@@ -10,7 +10,8 @@ projects and ten programming examples.
   * Numerically integrating the Euler equations for a point explosion.
 
 ## Examples
-1. ODE integration of a pendulm using Cromer method
-2. Linear Regression
-3. Logistic Regression 
-4. Bias of a coin using Bayes Theorem
+1. Electric potential plot
+2. ODE integration of a pendulm using Cromer method
+3. Linear Regression
+4. Logistic Regression 
+5. Bias of a coin using Bayes Theorem
