@@ -16,3 +16,4 @@ projects and ten programming examples.
 4. Linear Regression
 5. Logistic Regression 
 6. Bias of a coin using Bayes Theorem
+7. Simple N body code using Cromer method
