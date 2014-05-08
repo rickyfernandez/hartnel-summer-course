@@ -271,39 +271,92 @@ h' &= \frac{fh\left(6(5g-2x)x + 5g(x-10g)\gamma\right)}{x\left((5g-2x)^2-25\gamm
 
 \bigskip
 \noindent
-\textbf{Problem 3:} Integrate equations (\ref{eq: density diff eq}-\ref{eq: pressure diff eq}) with initial conditions (\ref{eq: density initial condition}-\ref{eq: pressure initial condition}) using the Runge-Kutta scheme. Remember you are integrating from the shock front to the origin.
+\textbf{Problem 3:} Integrate equations (\ref{eq: density diff eq}-\ref{eq: pressure diff eq}) with initial conditions (\ref{eq: density initial condition}-\ref{eq: pressure initial condition}) using the Runge-Kutta scheme. Remember you are integrating from the shock front to the origin. You should normalize, meaning dividing by the largest value, your solutions and plot them. Your plot should look like Figure \ref{fig: Blast wave solution}.
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.6]{Figures/Blast_wave}
+\end{center}
+\caption{Solution for $f(x)$, $g(x)$, and $h(x)$}
+\label{fig: Blast wave solution}
+\end{figure}
 
 \subsection{Numerical Integration}
-Once you solved for $f$, $g$, and $h$ you can use them to solve for $\xi_s$ by (\ref{eq: xi integral}). You will have to do a numerical integration. Let's review Simpson rule of integration that we went over in class. In the Simpson rule, we approximate the area under the curve of $y=f(x)$ by a series of strips that have a quadratic interpolation-- see Figure 
+Once you solved for $f$, $g$, and $h$ you can use them to solve for $\xi_s$ by (\ref{eq: xi integral}). You will have to do a numerical integration. Let's review Simpson rule of integration that we went over in class. In the Simpson rule, we approximate the area under the curve of $y=f(x)$ by a series of piecewise quadratic curves.  
 \begin{figure}[h!]
 \begin{center}
 \includegraphics[scale=0.2]{Figures/Simpson_rule}
 \end{center}
 \caption{Plot showing the $R(t) \propto t^{5/2}$ relation for the first atomic explosion.}
-\label{fig: Simpson rule}
+\label{fig: simpson rule}
 \end{figure}
+For example, in Figure \ref{fig: simpson rule} we would like to calculate the integral of $f(x)$ but we have only the values of $f$ at the locations $a$, $m$, and $b$ equally spaced apart. The general equation of a quadratic polynomial has the form
+\begin{equation}
+\label{eq: quadratic}
+A(x-x_0)^2+B(x-x_0)+C,
+\end{equation}
+where $A$, $B$, and $C$ are constants and $x_0$ corresponds to shift from the origin. We set $x_0=a$ and evaluate (\ref{eq: quadratic}) at $a$, $m$, and $b$
+\begin{align*}
+f(a) &= A(a-a)^2 + B(a-a) + C\\
+f(m) &= A(m-a)^2 + B(m-a) + C\\
+f(b) &= A(b-a)^2 + B(b-a) + C\\.
+\end{align*}
+Let the spacing be called $\delta$ such that $m-a = \delta$ and $b-a = 2\delta$. Then we have
+\begin{align*}
+f(a) &=  C\\
+f(m) &= A\delta ^2+ B\delta + C\\
+f(b) &= 4A\delta^2 + 2B\delta + C
+\end{align*}
+Solving for then unknown coefficients we have
+\begin{equation*}
+A = \frac{f(a) - 2f(m) + f(b)}{2\delta^2}, \,\,
+B = -\frac{f(b)-4f(m)+3f(a)}{2\delta}, \,\,
+C = f(a).
+\end{equation*}
+We now have a parabola that approximates $f(x)$, so now we can integrate it
+\begin{align*}
+I &= \int^b_a \left(A(x-a)^2 + B(x-a) + C\right) dx\\
+&= \frac{\delta}{3}\left(f(a) + 4f(m) + f(b)\right).
+\end{align*}
+To achieve a better approximation we simply divide the domain to into many slices, repeat Simpson's rule on successive pairs and then sum up the estimates of all pairs. So the final answer is
+\begin{equation}
+\label{eq: simpson}
+\int_a^b f(x) dx \approx \frac{\delta}{3}\left[f(a) + f(b) + 2\sum_{j=1}^{n/2-1} f(x_{2j}) + 4\sum_{j=1}^{n/2}f(x_{2j-1})\right],
+\end{equation}
+where $n$ is the number of subintervals. Notice that to fit the parabola we needed two slices, thus we need an even number $n$ of slices to perform the integration. This also implies we need an odd number of data values of $f(x)$. On a final note, equation (\ref{eq: simpson}) can be easily implemented in python by using slices. For example the term
+\begin{equation}
+\sum_{j=1}^{n/2-1} f(x_{2j})=f(x_1) + f(x_3) + \cdots + f(x_{n-1})
+\end{equation}
+can be written in python as {\tt np.sum(f[1:-1:2])}, where {\tt f} is an numpy array holding values of $f$ and {\tt np.sum()} is a function that sums all the elements of an array. You can do something similarly for the last term in equation (\ref{eq: simpson}).
+
+\bigskip
+\noindent
+\textbf{Problem 4:} Use Simpson's rule to integrate equation (\ref{eq: xi integral}) for $\gamma=5/3$. Before doing this integral you should test your Simpson's implementation by doing integrals that you know the answer. Your answer should be $\xi_s \approx 1.15$.
+
 
 \section{Remaining Problems}
-
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[scale=0.3]{Figures/Blast_wave}
+\includegraphics[scale=0.4]{Figures/2D_Blast_Wave}
 \end{center}
-\caption{Plot showing the $R(t) \propto t^{5/2}$ relation for the first atomic explosion.}
-\label{fig: Blast wave solution}
+\caption{2d slice of blast wave}
+\label{fig: slice blast wave solution}
 \end{figure}
 
+\bigskip
+\noindent
+\textbf{Problem 5:} In this problem you will make a series of 2d slices of the density from blast wave that later you can turn into a movie, see Figure \ref{fig: slice blast wave solution}. To create a 2d density slice of your solution you will first need to specify a Cartesian grid. Pick a grid such that $x,y\in [-0.5,0.5]\times[-0.5,0.5]$. For simplicity set $\rho_0$ and $E$ equal to one and then use equation (\ref{eq: shock radius}) to find the time elapsed for the shock to reach edge of the box (i.e $R(t)=0.5=\xi_s (Et^2/\rho_0)^{1/5}$). Then divide that time into a series of time snapshots. Use $R(t)$ to scale your solution to the appropriate time and then map your solution to the grid of density values, $\rho(x,y)$. The mapping corresponds to going through each value of $x$ and $y$ and calculating its radius $r$ from the origin and retrieve its corresponding value from $\rho(r)$ and store in a $\rho(x,y)$. You will have to handle two cases if the radius falls out of the integration regions. The first case is if $r$ is smaller then the initial radius of integration. You can simply assign it the smallest value of $\rho(r)$. The second case is when $r$ is larger than the final radius of integration. This case corresponds to values outside the shock which is simply $\rho_0$. To plot your solution you can use {\tt pcolor} or {\tt imshow} in pyplot. You may or may not find the following numpy functions helpful. 
+\begin{verbatim}
+linspace(start, stop): Return evenly spaced numbers
+  over a specified interval
+meshgrid(x,y): Return coordinate matrices from two
+  or more coordinate vectors
+ndarray.flatten(): Return a copy of the array collapsed
+  into one dimension
+digitize(x,bins): Return indices of teh bins to which
+  each value in input array belongs
+\end{verbatim}
+Check the online documentation for examples and further details.
 
 
-
-%Below is a code snippet:
-%\lstinputlisting[language=Python, caption=format, firstline=37, lastline=45,style=FormattedNumber]{Sedov.py}
-%\lstinputlisting[language=Python, label=Sedov, caption=Sedov.py, style=FormattedNumber]{Sedov.py}
-%\begin{lstlisting}[frame=single]  % Start your code-block
-%N = 10
-%x = range(N)
-%for i in x:
-%    print x
-%\end{lstlisting}
 
 \end{document}

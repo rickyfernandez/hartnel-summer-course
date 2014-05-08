@@ -105,11 +105,11 @@ def SolveBlastWave(N, gamma):
     # find the scaling constant by simpson integration
     integrand = 4*np.pi*(0.5*f*g**2 + h/(gamma-1.0))*radius_range**2
 
-    eta = np.abs(dx)*(integrand[0] + integrand[-1] + 4.*np.sum(integrand[1:-1:2]) +\
+    xi = np.abs(dx)*(integrand[0] + integrand[-1] + 4.*np.sum(integrand[1:-1:2]) +\
             2.0*np.sum(integrand[2:-2:2]))/3.0
-    eta = eta**(-1.0/5.0)
+    xi = xi**(-1.0/5.0)
 
-    return f, g, h, radius_range, eta
+    return f, g, h, radius_range, xi
 
 
 if __name__ == "__main__":
@@ -122,7 +122,7 @@ if __name__ == "__main__":
         N  = 1000         # number of integration intervals
         gamma = 5.0/3.0   # ratio of specific heats
 
-        f, g, h, radius, eta = SolveBlastWave(N, gamma)
+        f, g, h, radius, xi = SolveBlastWave(N, gamma)
 
         # plot normalized solution - to normalize the solution
         # divide by the last element (value at the shock which 
@@ -138,7 +138,8 @@ if __name__ == "__main__":
         l.draw_frame(False)
 
         plt.xlabel(r"$r/R_s$", fontsize=15)
-        plt.title("Blast Wave: $\eta$ = %0.3f" % eta)
+        plt.title(r"Blast Wave: $\xi$ = %0.3f" % xi)
+        plt.savefig("Blast_wave.png")
         plt.show()
 
 
@@ -147,7 +148,7 @@ if __name__ == "__main__":
         N  = 1000         # number of integration steps
         gamma = 5.0/3.0   # ratio of specific heats
 
-        f, g, h, radius_range, eta = SolveBlastWave(N, gamma)
+        f, g, h, radius_range, xi = SolveBlastWave(N, gamma)
 
         # now map values to a rectangular grid - first 
         # pick the size of the box which is centered at the origin
@@ -159,11 +160,11 @@ if __name__ == "__main__":
         # the edge of the box
 
         # time for the shock to reach the edge of the box (0.5*box_size)
-        tfinal = (0.5*box_size/eta)**(5.0/2.0)
+        tfinal = (0.5*box_size/xi)**(5.0/2.0)
 
         time_steps = 50                               # how many time steps
         time = np.linspace(0.0, tfinal, time_steps)   # set of times
-        Rn = eta*time**(2.0/5.0)                      # radius at each time
+        Rn = xi*time**(2.0/5.0)                      # radius at each time
 
         # add the value of the background density
         # remember we set the density to 1.0
