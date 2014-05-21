@@ -73,6 +73,7 @@
 %\end{figure}
 
 \section{Introduction}
+In this project you will write a computer program in python to solve a system of first order differential equations, used to model a spherical symmetric explosion. Throughout the text there are \textbf{problems} labeled in bold, make sure you do all of them. Most of the text serve as  a review, so if your comfortable with the material you can go straight to the problems. Each student is expected to hand in their own solutions.
 
 \section{Physics}
 \subsection{Rankine-Hugoniot Conditions}
@@ -99,9 +100,9 @@ Let us idealize the surface of the discontinuity as a plane moving to the right,
 \label{fig: Shock}
 \end{figure}
 
-We now have to relate our variables in the laboratory frame to the shock frame. Let us label our laboratory pre-shock values as $\hat{v_2}$, $\hat{\rho_2}$, $\hat{T_2}$ and post-shock values as $\hat{v_1}$, $\hat{\rho_1}$, $\hat{T_1}$. To transform to the laboratory frame we must subtract the shock speed, $v_s$ from both $v_1$ and $v_2$. Now the density $\hat{\rho}$ and temperature $\hat{T}$ are scalar quantities and are unaffected in the frame transformation (i.e. $\hat{\rho} = \rho$ and $\hat{T} = T$). 
+We now have to relate our variables in the laboratory frame to the shock frame. Let us label our laboratory pre-shock values as $\hat{v_1}$, $\hat{\rho_1}$, $\hat{T_1}$ and post-shock values as $\hat{v_2}$, $\hat{\rho_2}$, $\hat{T_2}$. To transform to the laboratory frame we must subtract the shock speed $v_s$ from both velocities, call them $v_1$ and $v_2$. Now the density $\hat{\rho}$ and temperature $\hat{T}$ are scalar quantities and are unaffected in the frame transformation (i.e. $\hat{\rho} = \rho$ and $\hat{T} = T$). 
 
-Now to relate the pre-shock and post-shock quantities we start with the continuity equation (eq. \ref{eq: continuity equation}) and Integrating it over an infinitesimal length $dx$,
+Now to relate the pre-shock and post-shock quantities we start with the continuity equation (\ref{eq: continuity equation}) and integrate it over an infinitesimal length $dx$,
 \begin{gather}
 \int_{-dx/2}^{dx/2} \left(\frac{\partial}{\partial t}\rho + \frac{\partial}{\partial x}\left(\rho v\right)\right)dx = 0\\
 \frac{\partial}{\partial t} \int_{-dx/2}^{dx/2} \rho dx + \rho v\bigg|_{-dx/2}^{dx/2}=0.
@@ -117,7 +118,7 @@ Here we assumed the shock to be steady, non changing in the rest frame the shock
 \end{gather}
 These expression merely express the conservation laws. The first, the conservation of mass, the second the conversion of ram pressure to thermal pressure, and the third the conversion of kinetic energy to enthalpy.
 
-Now that we have the Rankine conditions we would like to put them in a form that would be more useful for analysis. Specifically, we would like to have them in a form where the ratio of post-shock to pre-shock depends only on the Mach number $M$, ratio of the flow speed to sound speed, and the ratio of specific heats, $\gamma$. After a bit of algebra we have the following result,
+Now that we have the Rankine-Hugoniot conditions we would like to put them in a form that would be more useful for our analysis. Specifically, we would like to have them in a form where the ratio of post-shock to pre-shock depends only on the Mach number $M$, ratio of the flow speed to sound speed, and the ratio of specific heats, $\gamma$. After a bit of algebra we have the following result,
 \begin{gather}
 \label{eq: density ratio}
 \frac{\rho_1}{\rho_2}  = \frac{\left(\gamma+1\right)M^2}{\left(\gamma-1\right)M^2+2}\\
@@ -132,45 +133,45 @@ Notice the behavior of equation (\ref{eq: density ratio}) as $M$ varies. If $M >
 \label{eq: density ratio limit}
 \frac{\rho_1}{\rho_2} \rightarrow \frac{\gamma + 1}{\gamma - 1}.
 \end{equation}
-For $\gamma = 5/3$ the maximum compression is 4, thus if a disturbance compress the gas by a factor of 4 a shock develops moving with an infinite speed.
+For $\gamma = 5/3$ the maximum compression is 4, thus if a disturbance compress the gas by a factor of 4 a shock develops moving with an infinite Mach speed.
 
 
 \subsection{Blast Wave}
-A sudden release of large amount of energy $E$ creates a strong explosion, characterized by a strong shock wave, which progress in an ambient medium of density $\rho$. This is a natural model for supernova explosions or atomic bombs. We would like to know how fast will the shock propagate and how quantities like density or velocity vary with radius and time. We can find the behavior of the shock radius $R(t)$, if we assume that the blast was evolves if a self-similar fashion, we will justify this in the next section. That is, the evolution of some initial configuration expands uniformly. So later times must appear as enlargement of the previous configuration. Let $\lambda$ be a scale parameter characterizing the size of the blast wave at time $t$ after the explosion. The dimensions of the problem are:
+A sudden release of large amount of energy $E$ creates a strong explosion, characterized by a strong shock wave, which progress in an ambient medium of density $\rho_0$. This is a natural model for supernova explosions or atomic bombs. We would like to know how fast will the shock propagate and how quantities like density or velocity vary with radius and time. We can find the behavior of the shock radius $R(t)$, if we assume that the blast wave evolves in a self-similar fashion, we will justify this in the next section. That is, the evolution of some initial configuration expands uniformly. So later times must appear as enlargement of the previous configuration. Let $\lambda$ be a scale parameter characterizing the size of the blast wave at time $t$ after the explosion. The dimensions of the problem are:
 \begin{align*}
 [E] &= \mathrm{\frac{ML^2}{T^2}}\\
-[\rho] &= \mathrm{\frac{M}{L^3}}\\
+[\rho_0] &= \mathrm{\frac{M}{L^3}}\\
 [t] &= \mathrm{T}.
 \end{align*}
 To produce a dimension of length, the only possible combination is
 \begin{equation}
-\lambda = \left(Et^2/\rho\right)^{1/5}.
+\lambda = \left(Et^2/\rho_0\right)^{1/5}.
 \end{equation}
 Since our solution is self-similar, any shell of gas with radius $r$ has to evolve in the same way  as $\lambda$. Thus we introduce a dimensionless distant parameter
 \begin{equation}
-\xi = \frac{r}{\lambda}=r\left(\frac{Et^2}{\rho}\right)^{1/5}.
+\xi = \frac{r}{\lambda}=r\left(\frac{Et^2}{\rho_0}\right)^{1/5}.
 \end{equation}
 Therefore each shell can be labeled by a particular $\xi$. Let $\xi_s$ designate the shock front so that radius of the blast wave is given by
 \begin{equation*}
 \label{eq: shock radius}
-R(t) = \xi_s \left(\frac{Et^2}{\rho}\right)^{1/5}
+R(t) = \xi_s \left(\frac{Et^2}{\rho_0}\right)^{1/5}
 \end{equation*}
 The velocity of the shock front follows by time differentiation
 \begin{equation*}
-v_s(t) = \frac{dr_s}{dt} = \frac{2}{5}\frac{r_s}{t} = \frac{2}{5} \xi_s \left(\frac{E}{\rho t^3}\right)^{1/5}.
+v_s(t) = \frac{dR_s}{dt} = \frac{2}{5}\frac{R_s}{t} = \frac{2}{5} \xi_s \left(\frac{E}{\rho t^3}\right)^{1/5}.
 \end{equation*}
 So we have found that the shock front increases as $t^{2/5}$ and the velocity decreases as $t^{-3/5}$. Figure \ref{fig: Atomic Bomb} shows confirmation of the $t^{5/2}$ dependence for the first atomic explosion in New Mexico in 1945.
 \begin{figure}[h!]
 \begin{center}
 \includegraphics[scale=1.0]{Figures/Taylor_atomic}
 \end{center}
-\caption{Plot showing the $R(t) \propto t^{5/2}$ relation for the first atomic explosion.}
+\caption{Plot showing the $R_s(t) \propto t^{5/2}$ relation for the first atomic explosion.}
 \label{fig: Atomic Bomb}
 \end{figure}
 
 \section{Mathematics}
 \subsection{Differential Equations for the Blast Wave}
-We are now left to solve the Euler equations. The Euler equations in spherical coordinates are
+We are now left to solve the Euler equations. Since the problem has spherical symmetry we will use the Euler equations in spherical coordinates dropping the polar and azimuthal terms, which are
 \begin{gather}
 \frac{\partial \rho}{\partial t} + \frac{1}{r^2}\frac{\partial}{\partial r}\left(r^2 \rho v\right) = 0\\
 \rho\left(\frac{\partial}{\partial t} + v\frac{\partial}{\partial r}\right)v + \frac{\partial P}{\partial r} = 0\\
@@ -188,7 +189,7 @@ Our new functions $f(x)$, $g(x)$, and $h(x)$ represent the dimensionless density
 
 \bigskip
 \noindent
-\textbf{Problem 1:} Substitute expressions into to derive the Euler equations in term of our new functions $f(x)$, $g(x)$, and $h(x)$. Hint: you might find it easier to first work out all the derivatives first by using the chain rule and then plugging them into. For example to calculate $\partial \rho/\partial t$, you would first calculate $\partial x/ \partial t$,
+\textbf{Problem 1:} Substitute expressions into to derive the Euler equations in term of our new functions $f(x)$, $g(x)$, and $h(x)$. Hint: you might find it easier to first work out all the derivatives first by using the chain rule and then plugging them. For example to calculate $\partial \rho/\partial t$, you would first calculate $\partial x/ \partial t$,
 \begin{equation}
 \frac{\partial x}{\partial t} = \frac{\partial}{\partial} \xi_0^{-1}\left(\frac{\rho_0}{E}\right)^{1/5} t^{-2/5} r = -\frac{2}{5}\frac{x}{t},
 \end{equation}
@@ -205,7 +206,7 @@ Your final answer after should be
 \label{eq: diff eq 3}
 (fh'-\gamma h f')(5g-2x)-6hf &=0,
 \end{empheq}
-where I suppressed the $x$ dependence and the prime symbol means differentiation respect to $x$.
+where I suppressed the $x$ dependence and the prime symbol means differentiation respect to $x$. Notice that in our new equations $r$ and $t$ have canceled out, leaving $x$ as the only independent variable. This confirms our assumption that the solution is self-similar.
 
 \subsection{Initial Conditions}
 
@@ -217,7 +218,7 @@ Now we just need the initial conditions to start the integration to solve for $f
 \caption{Diagram of a plane shock in a frame where the shock speed is zero. In the laboratory frame the shock is traveling in the right direction}
 \label{fig: point and shock}
 \end{figure}
-We can now use the Rankine-Hugoniot conditions on the shock. Exterior to the shock is our background values, the state of the system before the explosion. Our background values are the density $\rho_1 = \rho_0$, velocity $v_1=0$, and pressure $P_1$. Interior to the shock is our unknown values $\rho_2$, $v_2 = v - v_s$, and $P_2$. Remember these values are in the frame of the shock, specifically only the velocities are affected in the transformation. Now we make the following assumption on the structure of the explosion. We suppose it's a strong explosion, meaning we use equation (\ref{eq: density ratio limit}). Now we can solve for the initial conditions, for example the initial condition at the shock for $f(x)$ is
+We can now use the Rankine-Hugoniot conditions on the shock. Exterior to the shock is our background values, the state of the system before the explosion. Our background values are the density $\rho_1 = \rho_0$, velocity $v_1=0$, and pressure $P_1$. Interior to the shock is our unknown values $\rho_2$, $v_2 = v - v_s$, and $P_2$. Remember these values are in the frame of the shock, specifically only the velocities are affected in the transformation. Now we make the following assumption on the structure of the explosion. We suppose it's a strong explosion, meaning we use equation (\ref{eq: density ratio limit}). Now we can solve for the initial condition for $f(x)$ at the shock
 \begin{gather}
 \rho(R_s) = \rho_2 = \rho_1 f(1) = \rho_1\frac{\gamma+1}{\gamma-1}\\
 \label{eq: density initial condition}
@@ -228,7 +229,7 @@ You can do the same in order to find the initial conditions for $g(x)$ and $h(x)
 \bigskip
 \noindent
 \textbf{Problem 2:}
-Find the initial conditions for $g(x)$ and $h(x)$. For $g(x)$ you should use equation (\ref{eq: density condition}) and (\ref{eq: density ratio}). Remember $v_1 = -v_s$, since this the initial velocity of the gas is assumed to be stationary and the velocity just behind the shock $v_2 = v - v_s$. For $h(x)$ use equation (\ref{eq: momentum condition}) and ignoring $P_1 \approx 0$ since we are assuming a strong shock. Your answers should be
+Find the initial conditions for $g(x)$ and $h(x)$. For $g(x)$ you should use equation (\ref{eq: density condition}) and (\ref{eq: density ratio}). Remember $v_1 = -v_s$, since this the initial velocity of the gas is assumed to be stationary and the velocity just behind the shock is $v_2 = v - v_s$. For $h(x)$ use equation (\ref{eq: momentum condition}) and ignoring $P_1 \approx 0$ since we are assuming a strong shock. Your answers should be
 \begin{empheq}[box=\fbox]{align}
 \label{eq: velocity initial condition}
 g(1) & = \frac{4}{5}\frac{1}{\gamma + 1}\\
@@ -271,7 +272,7 @@ h' &= \frac{fh\left(6(5g-2x)x + 5g(x-10g)\gamma\right)}{x\left((5g-2x)^2-25\gamm
 
 \bigskip
 \noindent
-\textbf{Problem 3:} Integrate equations (\ref{eq: density diff eq}-\ref{eq: pressure diff eq}) with initial conditions (\ref{eq: density initial condition}-\ref{eq: pressure initial condition}) using the Runge-Kutta scheme. Remember you are integrating from the shock front to the origin. You should normalize, meaning dividing by the largest value, your solutions and plot them. Your plot should look like Figure \ref{fig: Blast wave solution}.
+\textbf{Problem 3:} Integrate equations (\ref{eq: density diff eq}-\ref{eq: pressure diff eq}) with initial conditions (\ref{eq: density initial condition}-\ref{eq: pressure initial condition}) using the Runge-Kutta scheme. Remember you are integrating from the shock front to the origin. Notice that the differential equations blows up at the origin. To get around this stop the integration one step away from the origin. You should make a plot your solutions in one graph. You can do this by normalizing your solution, meaning dividing by the largest value. Your plot should look like Figure \ref{fig: Blast wave solution}.
 \begin{figure}[h!]
 \begin{center}
 \includegraphics[scale=0.6]{Figures/Blast_wave}
@@ -286,7 +287,7 @@ Once you solved for $f$, $g$, and $h$ you can use them to solve for $\xi_s$ by (
 \begin{center}
 \includegraphics[scale=0.2]{Figures/Simpson_rule}
 \end{center}
-\caption{Plot showing the $R(t) \propto t^{5/2}$ relation for the first atomic explosion.}
+\caption{Plot of $f(x)$ and its quadratic fit $P(x)$}
 \label{fig: simpson rule}
 \end{figure}
 For example, in Figure \ref{fig: simpson rule} we would like to calculate the integral of $f(x)$ but we have only the values of $f$ at the locations $a$, $m$, and $b$ equally spaced apart. The general equation of a quadratic polynomial has the form
@@ -320,7 +321,7 @@ I &= \int^b_a \left(A(x-a)^2 + B(x-a) + C\right) dx\\
 To achieve a better approximation we simply divide the domain to into many slices, repeat Simpson's rule on successive pairs and then sum up the estimates of all pairs. So the final answer is
 \begin{equation}
 \label{eq: simpson}
-\int_a^b f(x) dx \approx \frac{\delta}{3}\left[f(a) + f(b) + 2\sum_{j=1}^{n/2-1} f(x_{2j}) + 4\sum_{j=1}^{n/2}f(x_{2j-1})\right],
+\int_a^b f(x) dx \approx \frac{\delta}{3}\left[f(x_0=a) + f(x_n=b) + 2\sum_{j=1}^{n/2-1} f(x_{2j}) + 4\sum_{j=1}^{n/2}f(x_{2j-1})\right],
 \end{equation}
 where $n$ is the number of subintervals. Notice that to fit the parabola we needed two slices, thus we need an even number $n$ of slices to perform the integration. This also implies we need an odd number of data values of $f(x)$. On a final note, equation (\ref{eq: simpson}) can be easily implemented in python by using slices. For example the term
 \begin{equation}
@@ -336,7 +337,7 @@ can be written in python as {\tt np.sum(f[1:-1:2])}, where {\tt f} is an numpy a
 \section{Remaining Problems}
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[scale=0.4]{Figures/2D_Blast_Wave}
+\includegraphics[scale=0.5]{Figures/2D_Blast_Wave}
 \end{center}
 \caption{2d slice of blast wave}
 \label{fig: slice blast wave solution}
@@ -344,7 +345,7 @@ can be written in python as {\tt np.sum(f[1:-1:2])}, where {\tt f} is an numpy a
 
 \bigskip
 \noindent
-\textbf{Problem 5:} In this problem you will make a series of 2d slices of the density from blast wave that later you can turn into a movie, see Figure \ref{fig: slice blast wave solution}. To create a 2d density slice of your solution you will first need to specify a Cartesian grid. Pick a grid such that $x,y\in [-0.5,0.5]\times[-0.5,0.5]$. For simplicity set $\rho_0$ and $E$ equal to one and then use equation (\ref{eq: shock radius}) to find the time elapsed for the shock to reach edge of the box (i.e $R(t)=0.5=\xi_s (Et^2/\rho_0)^{1/5}$). Then divide that time into a series of time snapshots. Use $R(t)$ to scale your solution to the appropriate time and then map your solution to the grid of density values, $\rho(x,y)$. The mapping corresponds to going through each value of $x$ and $y$ and calculating its radius $r$ from the origin and retrieve its corresponding value from $\rho(r)$ and store in a $\rho(x,y)$. You will have to handle two cases if the radius falls out of the integration regions. The first case is if $r$ is smaller then the initial radius of integration. You can simply assign it the smallest value of $\rho(r)$. The second case is when $r$ is larger than the final radius of integration. This case corresponds to values outside the shock which is simply $\rho_0$. To plot your solution you can use {\tt pcolor} or {\tt imshow} in pyplot. You may or may not find the following numpy functions helpful. 
+\textbf{Problem 5:} In this problem you will make a series of 2d slices of the density from the blast wave that later you can turn into a movie, see Figure \ref{fig: slice blast wave solution}. To create a 2d density slice of your solution you will first need to specify a Cartesian grid. Pick a grid such that $x,y\in [-0.5,0.5]\times[-0.5,0.5]$. For simplicity set $\rho_0$ and $E$ equal to one and then use equation (\ref{eq: shock radius}) to find the time elapsed for the shock to reach edge of the box (i.e $R(t)=0.5=\xi_s (Et^2/\rho_0)^{1/5}$). Then divide that time into a series of time snapshots. Use $R(t)$ to scale your solution to the appropriate time slice and then map your solution to the grid of density values, $\rho(x,y)$. The mapping corresponds to going through each value of $x$ and $y$ and calculating its radius $r$ from the origin and retrieve its corresponding value from $\rho(r)$ and store in a $\rho(x,y)$. You will have to handle two cases if the radius falls out of the integration regions. The first case is if $r$ is smaller then the initial radius of integration. You can simply assign it the smallest value of $\rho(r)$. The second case is when $r$ is larger than the final radius of integration. This case corresponds to values outside the shock which is simply $\rho_0$. To plot your solution you can use {\tt pcolor} or {\tt imshow} in pyplot. You may or may not find the following numpy functions helpful. 
 \begin{verbatim}
 linspace(start, stop): Return evenly spaced numbers
   over a specified interval
@@ -352,7 +353,7 @@ meshgrid(x,y): Return coordinate matrices from two
   or more coordinate vectors
 ndarray.flatten(): Return a copy of the array collapsed
   into one dimension
-digitize(x,bins): Return indices of teh bins to which
+digitize(x,bins): Return indices of the bins to which
   each value in input array belongs
 \end{verbatim}
 Check the online documentation for examples and further details.
