@@ -8,6 +8,7 @@
 \usepackage{tgheros}
 \usepackage{empheq}
 \usepackage{cancel}
+\usepackage{amsfonts}
 %\uspackage{mathtools}
 
 
@@ -180,9 +181,103 @@ The end result is a system of partial differential equations that describe the e
 \end{empheq}
 
 \section{Mathematics}
-\subsection{Fourier Transforms}
+\subsection{Fourier Transform}
+A set of orthonormal vectors spans a vector space, for example $\hat{x}$, $\hat{y}$, and $\hat{z}$ span $\mathbb{R}^3$. However,
+they are not the only choice, we could pick cylindrical or polar coordinates or in fact there are infinite many to choose from. The notions of vector spaces that you are familiar with can be extended to more abstract quantities such as functions. A set of orthonormal functions spans a space of functions and likewise there are infinitely many basis sets to choose from. Joesph Fourier (1768-1830) chose sines and cosines because of their periodic properties and ease to integrate. The expansion of a  periodic function $f(x)$ in terms of sines and cosines is known as a Fourier series. The Fourier Transform is an extension of the Fourier series that allows functions that are not periodic to be represented. The Fourier Transform and it's inverse are defined as
+\begin{align*}
+\widehat{f(k)} &= \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty} e^{ikx}f(x) dx\\
+f(x) &= \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty}e^{-ikx}\widehat{f(k)} dk.
+\end{align*}
+Be aware that there are different conventions in writing the Fourier Transform. From the definition of the Fourier Transform, you may think of $\widehat{f(k)}$ as being the amount of the function $f(x)$ represented by the frequency $k$.
 
+\subsection{Derivative Relations}
+Fourier Transforms have many interesting properties but we will be focused with it's derivative relations and exploit them to solve equations (). Consider differentiating the inverse Fourier transform
+\begin{equation*}
+f(x) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty}e^{-ikx}\widehat{f(k)} dk,
+\end{equation*}
+we see the Fourier transform of $f'(x)$ is simply the product of $ik\widehat{f(k)}$
+\begin{gather*}
+f'(x) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty}ike^{ikx}\widehat{f(k)} dk = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty}e^{ikx}\widehat{f'(k)}dk\\
+\Rightarrow \widehat{f'(x)} = ik\widehat{f(x)}
+\end{gather*}
+This result is easily generalized
+\begin{equation*}
+\widehat{f^n(x)} = (ik)^n\widehat{f(x)}.
+\end{equation*}
+For example, consider the harmonic oscillator with a forcing function $F(t)$
+\begin{gather*}
+m\frac{d^2x}{dt^2}=-m\omega_0^2 x + F(t)\\
+\Rightarrow \ddot{x} + \omega_0^2 x = \frac{F(t)}{m}.
+\end{gather*}
+Now take the Fourier transform over time
+\begin{gather*}
+\widehat{\ddot{x}} + \omega_0^2\widehat{x} =-k^2\widehat{x} + \omega_0^2\widehat{x}= \widehat{F/m}\\
+\Rightarrow \widehat{x} = \frac{\widehat{F/m}}{\omega_0^2 - k^2}
+\end{gather*}
+So the differential equation governing the dynamics of $x(t)$ is reduced to computing two integrals, 
+\begin{gather*}
+\widehat{F/m} = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty}e^{-ikt} \frac{F(t)}{m} dt\\
+x(t) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty} e^{ikt}\frac{\widehat{F/m}}{\omega_0^2 - k^2} dk.
+\end{gather*}
 
+\subsection{Solving 2d Incompressible Fluid Equation by Fourier Transforms}
+We will now show how we can use Fourier transform to solve equations (). this will involve taking our equations to Fourier space. Let's think how the vorticity would evolve in one time step $dt$. We would have initial vorticity $\omega_0(x,y,t=0)$. From this initial vorticity we can solve for $\psi$ by performing the Fourier transform in $x$ and then $y$ on $\nabla^2\psi = \omega_0$. Let the Fourier transform in $x$ be denoted as $\widehat{f(x)}$ and the Fourier transform in y as $\widetilde{g(y)}$,
+\begin{align*}
+\widehat{f(x)} = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty}e^{-ik_x x}f(x)dx\\
+\widetilde{g(y)} = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty}e^{-ik_y y}g(y)dy.
+\end{align*}
+Then performing the Fourier transform on $x$
+\begin{equation*}
+\widehat{\nabla^2\psi} = -k_x^2\widehat{\psi} + \widehat{\frac{\partial^2 \psi}{\partial y^2}} = \widehat{\omega_0}
+\end{equation*}
+followed by the Fourier transform on $y$
+\begin{gather*}
+\widetilde{\widehat{\nabla^2\psi}} = -k_x^2\widetilde{\widehat{\psi}} - k_y^2\widetilde{\widehat{\psi}} = \widetilde{\widehat{\omega_0}}\\
+\Rightarrow \widetilde{\widehat{\psi}} = -\frac{\widetilde{\widehat{\omega_0}}}{k_x^2 + k_y^2}
+\end{gather*}
+Now we can take the Fourier transform of $x$ then $y$ of equation ()
+\begin{gather*}
+\frac{\partial}{\partial t} \widehat{\omega} = \widehat{\left[\psi,\omega\right]}  - \nu k_x^2\widehat{\omega} -  \nu\widehat{\frac{\partial^2 \omega}{\partial y^2}}\\
+\frac{\partial}{\partial t} \widetilde{\widehat{\omega}} = \widetilde{\widehat{\left[\psi,\omega\right]}}  - \nu (k_x^2 + k_y^2) \widetilde{\widehat{\omega}}.
+\end{gather*}
+Now the only term left to solve is $\widetilde{\widehat{\left[\psi,\omega\right]}}$. We first compute the derivatives of $\psi$ and $\omega$ by the the derivative relations. For example the first term $\frac{\partial\psi}{\partial x}\frac{\partial \omega}{\partial y}$ is
+\begin{align*}
+\frac{\partial \psi}{\partial x} &= \frac{1}{2\pi}\int_{-\infty}^{\infty}\int_{-\infty}^{\infty}e^{-i(k_x x+k_y y)}(ik_x\widetilde{\widehat{\psi}}) dk_x dk_y\\
+\frac{\partial \omega}{\partial y} &= \frac{1}{2\pi}\int_{-\infty}^{\infty}\int_{-\infty}^{\infty}e^{-i(k_x x+k_y y)}(ik_y\widetilde{\widehat{\omega}}) dk_x dk_y
+\end{align*}
+and likewise for $\frac{\partial\omega}{\partial y}\frac{\partial \psi}{\partial x}$. The next step is to take $\left[\psi,\omega\right]$ to Fourier space
+\begin{equation*}
+\widetilde{\widehat{\left[\psi,\omega\right]}} = \frac{1}{2\pi}\int_{-\infty}^{\infty}\int_{-\infty}^{\infty}e^{k_x x+k_y y}\left[\psi,\omega\right]dxdy
+\end{equation*}
+We can now evolve 
+\begin{equation*}
+\frac{\partial \widetilde{\widehat{\omega}}}{\partial t}  = \widetilde{\widehat{\left[\psi,\omega\right]}}  - \nu (k_x^2 + k_y^2) \widetilde{\widehat{\omega}}.
+\end{equation*}
+by any numerical method such as the Runge-Kutta method that we have been using.
+
+\section{Numerical}
+\subsection{Fast Fourier Transforms in Python}
+We have covered a lot of mathematics so far. The crucial part in computing Fourier transforms is computing the integrals. The NumPy package fft can do this for us. Lets go over some examples on how to use it. There are a couple of caveats when we do the transform numerically. First we can not do the integration over an infinite domain, so we have to pick a finite domain $L$. This consequently implies that our solutions on this finite domain have periodic conditions. If this is not the case our solutions will have wild oscillations, this is known as Gibbs phenomenon. Further the fft does not work with the dimension of the problem but instead with $n$, the number of points that discretized the domain. So we have to scale the dimensions out of the problem and replace them afterwards. Lastly, due to the implementation of the fft, the domain should be discretized $2^n$ points (i.e $2, 4, 8, 16, 32, 64, 128, 256, ...)$. 
+
+Let's take the Fourier transform of 
+\begin{equation*}
+y = \mathrm{sin}(2\pi 4t).
+\end{equation*}
+In frequency space we should only have the components $k=\pm2\pi 4$ 
+\begin{align*}
+\widehat{y} &= \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty} e^{-ikx} \mathrm{sin}(2\pi 4x)dx =\frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty} e^{-ikx} \left(\frac{e^{i2\pi 4x}-e^{-i2\pi 4x}}{2i}\right)dx\\
+&=\frac{-i}{2\sqrt{2\pi}}\int_{-\infty}^{\infty} e^{-ix(k-2\pi 4)}dx + i\frac{1}{2\sqrt{2\pi}}\int_{-\infty}^{\infty} e^{-ix(k +2\pi 4)}dx\\
+&=i\sqrt{\frac{\pi}{2}}\left(\delta(k+2\pi 4) - \delta(k-2\pi 4)\right),
+\end{align*}
+where $\delta(x)$ is the delta function and is defined as follows
+\[
+    \delta(x)= 
+\begin{cases}
+    +\infty, & \text{if } x=0\\
+    0,              & \text{otherwise.}
+\end{cases}
+\]
+So the only non-zero values of $\widehat{y}$ are at $k\pm 2\pi 4$. Let's compute this numerically in python. The first step is to pick a domain. Since the function has to be periodic, pick $L=1$ so that $y$ completes on oscillation.
 %\section{Physics}
 %\subsection{Rankine-Hugoniot Conditions}
 %In class we derived the Euler equations:
