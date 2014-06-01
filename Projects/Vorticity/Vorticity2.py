@@ -6,7 +6,6 @@ from scipy.integrate import ode
 def F(t, wt2, nu, K, K2, n, KX, KY):
 
     # reshape 1d array into 2d array
-    #print "type: ", type(wt2)
     wt = wt2.reshape(n, n)
 
     # calculate psi in fourier space
@@ -23,8 +22,6 @@ def F(t, wt2, nu, K, K2, n, KX, KY):
 
 # time slices
 t_0 = 0.; t_final = 80
-#tspan = np.linspace(t_0, t_final)
-#dt = np.mean(np.diff(tspan))
 dt = 1.0
 nu = 0.001
 
@@ -48,13 +45,14 @@ K = KX**2 + KY**2
 K2 = K.flatten()
 
 # initial condition
-w = np.exp(-0.25*X**2 - 2.*Y**2)
+#w = np.exp(-0.25*X**2 - 2.*Y**2)
+w = -np.exp(-0.25*(X+2)**2 - 2.*Y**2) + np.exp(-0.25*(X-2)**2 - 2.*Y**2)
 wt = fft.fft2(w)
 wt2 = wt.flatten()
 
 # setup the integrator
-#sol = ode(F).set_integrator('zvode', atol=1.E-10, rtol=1.E-10)
-sol = ode(F).set_integrator('dopri5', atol=1.E-10, rtol=1.E-10)
+sol = ode(F).set_integrator('zvode', atol=1.E-10, rtol=1.E-10)
+#sol = ode(F).set_integrator('dopri5', atol=1.E-10, rtol=1.E-10)
 sol.set_initial_value(wt2, t_0)
 sol.set_f_params(nu, K, K2, n, KX, KY)
 
@@ -72,7 +70,7 @@ while sol.successful() and sol.t < t_final:
     plt.xlim(-.5*L, .5*L)
     plt.ylim(-.5*L, .5*L)
     plt.colorbar()
-    plt.clim(0., 1.)
+    plt.clim(-0.8, 0.8)
 
     plt.savefig("Vorticity_" + `index`.zfill(4))
     plt.clf()

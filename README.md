@@ -8,6 +8,8 @@ projects and ten programming examples.
   * Numerically intgrating the Lane-Emden equation using Runge-Kutta method.
 * Blast Wave
   * Numerically integrating the Euler equations for a point explosion.
+* Vorticity
+  * Use Fourier transforms to sove the 2d vorticity equations including viscosity
 
 ## Examples
 1. Electric potential plot
