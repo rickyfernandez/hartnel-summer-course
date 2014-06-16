@@ -160,12 +160,12 @@ n(p) = \frac{2}{h^3}4\pi p^2,
 \end{equation*}
 where $h$ is plank's constant. The velocity is related to the momentum, in the general relativistic form, as
 \begin{equation*}
-v=\frac{p}{m\gamma} =\frac{pc^2}{E}=\frac{pc^2}{\sqrt{p^2c^2+m_\mathrm{e}^2c^2}},
+v=\frac{p}{m\gamma} =\frac{pc^2}{E}=\frac{pc^2}{\sqrt{p^2c^2+m_\mathrm{e}^2c^4}},
 \end{equation*}
 where $c$ is the speed of light and $m_\mathrm{e}$ is the electron mass. So our pressure integral has the following form
 \begin{equation*}
 \label{Eq. Degenerate Pressure}
-P = \frac{8\pi}{3h^3}\int_0^{p_F}\frac{p^4 c^2}{\sqrt{p^2 c^2+m_\mathrm{e}^2 c^2}}dp.
+P = \frac{8\pi}{3h^3}\int_0^{p_F}\frac{p^4 c^2}{\sqrt{p^2 c^2+m_\mathrm{e}^2 c^4}}dp.
 \end{equation*}
 In the integral above, I have truncated the upper limit because the electrons only occupy the lowest momentum states. The upper momentum limit is given by
 \begin{equation*}
@@ -231,14 +231,14 @@ Lets recap what we have done so far. We used the fluid equations coupled with gr
 You are almost at the point where you can solve equation (\ref{Eq. Lane Emden}) but before we can turn the numerical crank we need appropriate initial conditions. At the origin of the star we have a central density $\rho_c$ and the force vanishing. This can be formulated as
 \begin{align*}
 \rho(r=0) &=\rho_c\theta(\xi=0)^n = \rho_c\\
-\frac{dP}{dr}(r=0) & =\rho_c\frac{d\theta^n}{dr}(\xi=0) = 0.
+\frac{dP}{dr}(r=0) & \propto \theta\frac{d\theta}{d\xi}(\xi=0) = 0.
 \end{align*}
 Therefore the appropriate initial conditions for our scaled quantities are
 \begin{align}
 \label{Eq. Initial Conditions 1}
 \theta(\xi=0) &= 1\\
 \label{Eq. Initial Conditions 2}
-\frac{d\theta}{dr}(\xi=0) &=0.
+\frac{d\theta}{d\xi}(\xi=0) &=0.
 \end{align}.
 
 Once you solve the equation (\ref{Eq. Lane Emden}) you will need to scale the solution to the appropriate units using
@@ -263,11 +263,11 @@ In class we talked about numerically solving differential equations by using Tay
 \end{equation*}
 and we would like to solve it numerically. Starting with the initial value $x\left(t_0\right)$, we want to progress to $x\left(t_0 + h\right)$, where $h$ is our step size. We can perform a Taylor expansion around $t_0+\frac{1}{2}h$ in order to get the value of $x\left(t_0+h\right)$,
 \begin{equation*}
-x\left(t_0+h\right) = x(t_0+\frac{1}{2}h) + \frac{1}{2}h\frac{dx}{dt}\bigg|_{t_0+\frac{1}{2}h}+\frac{1}{8}h^2\frac{d^2x}{dt^2}\bigg|_{t_0+\frac{1}{2}} + \mathcal{O}\left(h^3\right).
+x\left(t_0+h\right) = x(t_0+\frac{1}{2}h) + \frac{1}{2}h\frac{dx}{dt}\bigg|_{t_0+\frac{1}{2}h}+\frac{1}{8}h^2\frac{d^2x}{dt^2}\bigg|_{t_0+\frac{1}{2}h} + \mathcal{O}\left(h^3\right).
 \end{equation*} 
 Similarly we can derive a relation for $x\left(t_0\right)$ by expanding backwards from $x\left(t_0+h\right)$,
 \begin{equation*}
-x\left(t_0\right) = x(t_0+\frac{1}{2}h) - \frac{1}{2}h\frac{dx}{dt}\bigg|_{t_0+\frac{1}{2}h}+\frac{1}{8}h^2\frac{d^2x}{dt^2}\bigg|_{t_0+\frac{1}{2}} + \mathcal{O}\left(h^3\right).
+x\left(t_0\right) = x(t_0+\frac{1}{2}h) - \frac{1}{2}h\frac{dx}{dt}\bigg|_{t_0+\frac{1}{2}h}+\frac{1}{8}h^2\frac{d^2x}{dt^2}\bigg|_{t_0+\frac{1}{2}h} + \mathcal{O}\left(h^3\right).
 \end{equation*} 
 Subtracting the above equations and rearranging terms we have the following equation,
 \begin{equation*}

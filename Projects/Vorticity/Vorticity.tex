@@ -259,6 +259,7 @@ by any numerical method such as the Runge-Kutta method that we have been using.
 \subsection{Fast Fourier Transforms in Python}
 We have covered a lot of mathematics so far. The crucial part in computing Fourier transforms is computing the integrals. The NumPy package fft can do this for us. Lets go over some examples on how to use it. There are a couple of caveats when we do the transform numerically. First we can not do the integration over an infinite domain, so we have to pick a finite domain $L$. This consequently implies that our solutions on this finite domain have periodic conditions. If this is not the case our solutions will have wild oscillations, this is known as Gibbs phenomenon. Further the fft does not work with the dimension of the problem but instead with $n$, the number of points that discretized the domain. So we have to scale the dimensions out of the problem and replace them afterwards. Lastly, due to the implementation of the fft, the domain should be discretized $2^n$ points (i.e $2, 4, 8, 16, 32, 64, 128, 256, ...)$. 
 
+\subsection{Example 1:}
 Let's take the Fourier transform of 
 \begin{equation*}
 y = \mathrm{sin}(2\pi 4t).
@@ -277,7 +278,19 @@ where $\delta(x)$ is the delta function and is defined as follows
     0,              & \text{otherwise.}
 \end{cases}
 \]
-So the only non-zero values of $\widehat{y}$ are at $k\pm 2\pi 4$. Let's compute this numerically in python. The first step is to pick a domain. Since the function has to be periodic, pick $L=1$ so that $y$ completes on oscillation.
+So the only non-zero values of $\widehat{y}$ are at $k\pm 2\pi 4$. Let's compute this numerically in python. The first step is to pick a domain. Since the function has to be periodic, let $L=1$ so that $y$ completes one oscillation. Further let's discretized the domain into $n=128$ points. In python, it looks like this
+\lstinputlisting[language=Python, label=FFT Example 1, caption=fft.py, style=FormattedNumber]{fft_example_1.py}
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.5]{Figures/fft_example_1}
+\end{center}
+\caption{Hello}
+\label{fig: fft example 1}
+\end{figure}
+
+\subsection{Example 2:}
+\lstinputlisting[language=Python, label=FFT Example 1, caption=fft.py, style=FormattedNumber]{fft_example_2.py}
+%\lstinputlisting[language=Python, caption=format, firstline=1, lastline=10,style=FormattedNumber]{fft_example_1.py} 
 %\section{Physics}
 %\subsection{Rankine-Hugoniot Conditions}
 %In class we derived the Euler equations:

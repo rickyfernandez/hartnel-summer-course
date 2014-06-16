@@ -26,7 +26,7 @@ def gradient(theta, X, y):
 
 
 # load test scores to numpy arrays
-data = np.loadtxt("ex2data1.txt", delimiter=",")
+data = np.loadtxt("Data/ex2data1.txt", delimiter=",")
 
 x = data[:,0:2]  # features
 y = data[:,2]    # outputs
